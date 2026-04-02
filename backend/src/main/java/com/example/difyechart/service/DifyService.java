@@ -72,6 +72,8 @@ public class DifyService {
                 conn.setRequestProperty("Content-Type", "application/json");
                 conn.setRequestProperty("Authorization", "Bearer " + difyApiKey);
                 conn.setDoOutput(true);
+                conn.setConnectTimeout(30000);
+                conn.setReadTimeout(600000);
 
                 Map<String, Object> body = new HashMap<>();
                 body.put("inputs", new HashMap<>());
@@ -115,6 +117,8 @@ public class DifyService {
                 reader.close();
                 conn.disconnect();
                 emitter.complete();
+            } catch (java.net.SocketTimeoutException e) {
+                emitter.completeWithError(new RuntimeException("Dify API 连接超时，请检查 Dify 服务是否正常运行", e));
             } catch (Exception e) {
                 emitter.completeWithError(e);
             }
