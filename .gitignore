@@ -3,3 +3,5 @@ node_modules/
 AGENTS.md
 
 ROADMAP.md
+backend/data/difyechart.lock.db
+backend/data/difyechart.mv.db

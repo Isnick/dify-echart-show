@@ -86,9 +86,13 @@
       class="generating-section"
     >
       <div class="generating-header">
-        <span class="tech-badge tech-badge-loading">
+        <span v-if="loading" class="tech-badge tech-badge-loading">
           <span></span>
           思考中...
+        </span>
+        <span v-else class="tech-badge tech-badge-success">
+          <span></span>
+          生成完成
         </span>
       </div>
       <div class="generating-content">
@@ -305,7 +309,21 @@ const generate = async () => {
       ? result.finalAnswer
       : result.fullText
 
-    const config = extractChartOption(result.finalAnswer)
+    let config: Record<string, unknown> | null = null
+    try {
+      config = extractChartOption(result.finalAnswer)
+    } catch {
+      // 无法提取有效图表配置时，直接显示返回的原始内容
+      console.log('无法解析为图表配置，显示原始内容')
+    }
+
+    if (!config) {
+      // 无有效配置，只显示原始内容，不渲染图表
+      chartRendered.value = false
+      loading.value = false
+      error.value = ''
+      return
+    }
 
     if (!chartInstance) {
       throw new Error('图表容器初始化失败')
@@ -323,6 +341,10 @@ const generate = async () => {
 
     chartInstance.clear()
     chartInstance.setOption(styledConfig)
+    // 确保图表尺寸正确 - 在容器可见后需要重新计算尺寸
+    setTimeout(() => {
+      chartInstance?.resize()
+    }, 0)
     chartRendered.value = true
     error.value = ''
   } catch (e: unknown) {
