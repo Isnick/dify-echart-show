@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find D:git-elsedify-echart -type f -name *.json -o -name *.md -o -name *.yml -o -name *.yaml)"
+    ]
+  }
+}
