@@ -20,10 +20,10 @@
           placeholder="输入图表描述，例如：显示一个柱状图，数据是1到12月的销售额..."
           class="tech-input prompt-input"
           rows="3"
-          @keydown.enter.ctrl.prevent="generate"
+          @keydown.enter.prevent="generate"
         ></textarea>
         <div class="input-hint">
-          <span>💡 提示：按 Ctrl + Enter 快速生成</span>
+          <span>💡 提示：按 Enter 快速生成</span>
           <span class="char-count">{{ prompt.length }} 字符</span>
         </div>
       </div>
@@ -95,7 +95,7 @@
           生成完成
         </span>
       </div>
-      <div class="generating-content">
+      <div ref="generatingContentRef" class="generating-content">
         {{ generatingText }}
       </div>
     </div>
@@ -232,6 +232,7 @@ const error = ref('')
 const generatingText = ref('')
 const chartRendered = ref(false)
 const chartRef = ref<HTMLElement | null>(null)
+const generatingContentRef = ref<HTMLElement | null>(null)
 let chartInstance: echarts.ECharts | null = null
 
 const initChart = () => {
@@ -303,6 +304,12 @@ const generate = async () => {
   try {
     const result = await generateChart({ prompt: prompt.value }, (text) => {
       generatingText.value = text
+      // 自动滚动到底部
+      setTimeout(() => {
+        if (generatingContentRef.value) {
+          generatingContentRef.value.scrollTop = generatingContentRef.value.scrollHeight
+        }
+      }, 0)
     })
 
     generatingText.value = result.finalAnswer.length >= result.fullText.length
@@ -535,14 +542,16 @@ const downloadChart = () => {
 }
 
 .generating-content {
-  padding: 20px;
-  color: var(--tech-text-secondary);
+  padding: 24px;
+  color: var(--tech-text-primary);
   font-family: var(--tech-font-mono);
-  font-size: 13px;
-  line-height: 1.8;
+  font-size: 15px;
+  line-height: 2;
   white-space: pre-wrap;
-  max-height: 300px;
+  max-height: 400px;
   overflow-y: auto;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 12px 12px;
 }
 
 .chart-section {

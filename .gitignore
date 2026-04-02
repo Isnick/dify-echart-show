@@ -1,7 +1,60 @@
+# ===== 前端 =====
+# 依赖
 node_modules/
 
-AGENTS.md
+# 构建产物
+frontend/dist/
+frontend/dist-ssr/
+frontend/.vite/
 
-ROADMAP.md
+# 环境变量（包含敏感信息时）
+frontend/.env.local
+frontend/.env.*.local
+
+# 日志
+frontend/*.log
+
+# ===== 后端 =====
+# Maven 构建产物
+backend/target/
+backend/pom.xml.tag
+backend/pom.xml.releaseBackup
+backend/pom.xml.versionsBackup
+backend/pom.xml.next
+backend/release.properties
+backend/dependency-reduced-pom.xml
+backend/buildNumber.properties
+backend/.mvn/timing.properties
+backend/.mvn/wrapper/maven-wrapper.jar
+
+# 数据库文件
 backend/data/difyechart.lock.db
 backend/data/difyechart.mv.db
+
+# 日志文件
+backend/*.log
+backend/logs/
+
+# 临时文件
+backend/*.tmp
+backend/*.bak
+backend/*.swp
+backend/*~.nib
+
+# ===== IDE 配置 =====
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+.factorypath
+
+# ===== 操作系统 =====
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ===== 项目文档（代理生成） =====
+AGENTS.md
+ROADMAP.md
